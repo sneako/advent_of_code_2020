@@ -16,7 +16,7 @@ pub fn part_one(input: &Vec<u64>) -> u64 {
         .iter()
         .enumerate()
         .find(|(index, val)| {
-            not_product_of_preamble(*index + preamble_len, preamble_len, **val, &input)
+            cannot_produce_from_leading(*index + preamble_len, preamble_len, **val, &input)
         }) {
         Some((_, result)) => *result,
         _ => panic!("no answer found"),
@@ -32,7 +32,7 @@ pub fn part_two(input: &Vec<u64>) -> u64 {
             let mut sorted = set.clone();
             sorted.sort();
             sorted.first().unwrap() + sorted.last().unwrap()
-        },
+        }
         _ => panic!("no answer found"),
     }
 }
@@ -58,13 +58,16 @@ fn find_contiguous_set(input: &Vec<u64>, target: u64) -> Option<Vec<u64>> {
     None
 }
 
-fn not_product_of_preamble(index: usize, preamble_len: usize, val: u64, input: &Vec<u64>) -> bool {
+fn cannot_produce_from_leading(
+    index: usize,
+    preamble_len: usize,
+    val: u64,
+    input: &Vec<u64>,
+) -> bool {
     for i in index - preamble_len..index {
         for j in index - preamble_len + 1..index {
-            if i != j {
-                if val == input[i] + input[j] {
-                    return false;
-                }
+            if i != j && val == input[i] + input[j] {
+                return false;
             }
         }
     }
